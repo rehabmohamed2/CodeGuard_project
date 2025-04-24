@@ -1,0 +1,12 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+*/sev_model.onnx
+*/cwe_model.onnx
+*/line_model.onnx
+src/test/files/.vscode
+test.py
+*.vsix
+*.cpp
