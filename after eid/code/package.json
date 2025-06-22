@@ -1,0 +1,169 @@
+{
+  "name": "aibughunter",
+  "displayName": "AIBugHunter",
+  "publisher": "AIBugHunter",
+  "description": "AI-driven Software Vulnerability Analysis Tool That Helps Security Analysts Locate Vulnerable Code, Explain Vulnerability Types, and Suggest Vulnerability Repairs",
+  "icon": "logo.png",
+  "version": "1.0.4",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Testing",
+    "Linters",
+    "Data Science"
+  ],
+  "activationEvents": [
+    "onLanguage:cpp",
+    "onLanguage:c"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aibughunter/aibughunter.git"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "aibughunter.restart",
+        "title": "Restart Extension",
+        "category": "AIBugHunter"
+      }
+    ],
+    "configuration": {
+      "title": "AIBugHunter",
+      "properties": {
+        "AiBugHunter.inference.inferenceMode": {
+          "order": 0,
+          "type": "string",
+          "default": "Local",
+          "description": "Inference Modes",
+          "enum": [
+            "Local",
+            "On Premise"
+          ],
+          "enumDescriptions": [
+            "Model is downloaded locally to your computer and processed locally for inference",
+            "Allows you to host the model on on-premise server for inference"
+          ]
+        },
+        "AiBugHunter.inference.inferenceServerURL": {
+          "order": 2,
+          "type": "string",
+          "default": "http://localhost:5000",
+          "description": "Root URL of the inference server hosted on the on-premise server"
+        },
+        "AiBugHunter.inference.useCUDA": {
+          "order": 1,
+          "description": "Enable CUDA for inference (CUDA supported card required)",
+          "type": "boolean",
+          "default": false
+        },
+        "AiBugHunter.diagnostics.informationLevel": {
+          "order": 3,
+          "type": "string",
+          "default": "Verbose",
+          "description": "Type of diagnostics message to be displayed",
+          "enum": [
+            "Verbose",
+            "Fluent"
+          ]
+        },
+        "AiBugHunter.diagnostics.diagnosticMessageInformation": {
+          "order": 4,
+          "type": "array",
+          "default": [
+            "lineNumber",
+            "cweID",
+            "cweType",
+            "cweSummary",
+            "severityLevel",
+            "severityScore"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "scope": "window",
+          "description": "Enter which information you want it to be displayed in verbose mode.\n\n Available options are: lineNumber, cweID, cweType, cweSummary, severityLevel, severityScore, confidenceScore (not on by default)"
+        },
+        "AiBugHunter.diagnostics.showDescription": {
+          "order": 4,
+          "type": "boolean",
+          "default": true,
+          "description": "Show CWE description"
+        },
+        "AiBugHunter.diagnostics.highlightSeverityType": {
+          "order": 5,
+          "type": "string",
+          "default": "Error",
+          "description": "Highlight severity type",
+          "enum": [
+            "Error",
+            "Warning",
+            "Information",
+            "Hint"
+          ],
+          "enumDescriptions": [
+            "Highlight as error",
+            "Highlight as warning",
+            "Highlight as information",
+            "Highlight as hint"
+          ]
+        },
+        "AiBugHunter.diagnostics.maxNumberOfLines": {
+          "order": 6,
+          "type": "number",
+          "default": 1,
+          "description": "Top-n number of vulnerable lines to be highlighted"
+        },
+        "AiBugHunter.diagnostics.delayBeforeAnalysis": {
+          "order": 7,
+          "type": "number",
+          "default": 1500,
+          "description": "Delay after paused typing before analysis (in milliseconds)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "test-compile": "tsc -p ./"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.69.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "@vscode/test-electron": "^2.1.3",
+    "esbuild": "^0.14.54",
+    "eslint": "^8.16.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.2"
+  },
+  "extensionDependencies": [
+    "ms-vscode.cpptools"
+  ],
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.3",
+    "extract-zip": "^2.0.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "python-shell": "^3.0.1",
+    "vsce": "^2.10.0",
+    "xml2js": "^0.4.23",
+    "xml2json": "^0.12.0"
+  }
+}
